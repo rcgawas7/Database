@@ -1,0 +1,44 @@
+
+
+Assignment – 15
+
+
+1) Assume there is a table called Multicust, with all of the same column definitions
+as Salespeople. Write a command that inserts all salespeople with more than one
+customer into this table.
+
+-->CREATE TABLE Multicast AS
+SELECT * FROM salespeople
+WHERE snum IN (SELECT snum FROM customers 
+GROUP BY snum
+HAVING count(snum)>1);  
+
+SELECT * FROM multicast;
+
+
+2) Write a command that deletes all customers with no current orders.
+
+-->savepoint s1;
+
+delete from CUSTOMERS
+	where cnum in (select Cnum from ORDERS
+        where Cnum not in (select Cnum from CUSTOMERS));
+                        
+rollback to savepoint s1;
+
+3) Write a command that increases by twenty percent the commissions of all
+salespeople with total current orders above Rs. 3,000.
+
+-->savepoint s1;
+
+update SALESPEOPLE
+	set Comm = (Comm * (20/100)) 
+		where Snum in (select Snum from ORDERS
+	        where Amt > 3000);
+
+rollback to savepoint s1;
+
+commit; 
+
+
+
