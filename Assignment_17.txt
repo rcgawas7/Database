@@ -1,0 +1,103 @@
+
+
+Assignment – 17
+
+
+
+1) Create the Orders table so that all onum values as well as all combinations of
+cnum and snum are different from one another, and so that NULL values are
+excluded from the date field.
+
+savepoint S1;
+
+create table ORDERS_2
+(
+    Onum int(5),
+    Cnum int(5),
+    Snum int(5),
+    Odate date,
+    PRIMARY KEY (Onum, Cnum, Snum)
+);
+
+
+alter table ORDERS_2 modify column Odate date not null; 
+
+desc ORDERS_2;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| Onum  | int  | NO   | PRI | NULL    |       |
+| Cnum  | int  | NO   | PRI | NULL    |       |
+| Snum  | int  | NO   | PRI | NULL    |       |
+| Odate | date | NO   |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+
+
+
+2) Create the Salespeople table so that the default commission is 10% with no
+NULLS permitted, snum is the primary key, and all names fall alphabetically
+between A and M, inclusive (assume all names will be uppercase).
+
+create table SALESPEOPLE_1
+(
+	Snum int(5) PRIMARY KEY,
+    Sname varchar(20) 
+		check (Sname between 'A' and 'M' and upper(Sname)),
+	Comm float(10,2) default 0.10
+);
+
+desc SALESPEOPLE_1;
+
+insert into SALESPEOPLE_1 (Sname)
+values ('MEAL');
+           
+CREATE TABLE salespeople_2( 
+	comm float(3) DEFAULT 10, 
+	snum int(4) PRIMARY KEY,
+	sname varchar(10) 
+	check(substr(upper(sname),1,1) BETWEEN 'A' AND 'M') 
+);
+
+insert into SALESPEOPLE_2 (Sname)
+values ('MEAL');
+
+insert into SALESPEOPLE_2(Snum, Sname)
+values (1, 'BEAL');
+
+insert into SALESPEOPLE_2 (Snum, Sname)
+values (2, 'Zeal');
+
+drop table SALESPEOPLE_1;
+
+show tables;
+
+drop table SALESPEOPLE_2;
+
+
+
+3) Create the Orders table, making sure that the onum is greater than the cnum, and
+the cnum is greater that the snum. Allow no NULLS in any of these three fields.
+
+create table ORDERS_1
+(
+	Onumber int(6),
+    Cnumber int(6),
+    Snumber int(6),
+    CONSTRAINT Onumber_Cnumber_Snumber
+	check (Onumber > Cnumber and Cnumber > Snumber)
+);
+
+alter table ORDERS_1 modify column Onumber date not null;
+
+alter table ORDERS_1 modify column Cnumber date not null;
+
+alter table ORDERS_1 modify column Snumber date not null;
+
+insert into ORDERS_1 (Onumber, Cnumber, Snumber)
+values (null, null, null);                  
+
+insert into ORDERS_1 (Onumber, Cnumber, Snumber)
+values (12, 13, 14); 
+
+insert into ORDERS_1 (Onumber, Cnumber, Snumber)
+values (15, 16, 17);
